@@ -15,7 +15,7 @@ import { Sun, Moon, Share2, Download, Play, Pause } from "lucide-react";
 import * as THREE from "three";
 
 // Import types and utilities
-import type { MathematicalElement, DataPoint, ExportData } from "../types";
+import type { MathematicalElement, DataPoint, ExportData } from "@/types";
 import {
   calculateParabolaFocus,
   calculateParabolaDirectrix,
@@ -24,12 +24,12 @@ import {
   generateParabolaPoints,
   generateEllipsePoints,
   generateHyperbolaPoints,
-} from "../utils/mathUtils";
+} from "@/utils/mathUtils";
 import {
   exportToJSON,
   shareToClipboard,
   generateShareText,
-} from "../utils/exportUtils";
+} from "@/utils/exportUtils";
 
 export default function ConicSectionsPage() {
   const [darkMode, setDarkMode] = useState(false);
@@ -143,9 +143,10 @@ export default function ConicSectionsPage() {
     camera.position.set(3, 2, 4);
     camera.lookAt(0, 0, 0);
 
-    // Animation loop
-    let animationId: number;
-    const animate = () => {
+    // Animation loop with proper variable initialization
+    let animationId: number | undefined;
+
+    const animate = (): void => {
       if (isAnimationPlaying) {
         // Rotate the entire scene slowly
         scene.rotation.y += 0.01;
@@ -155,15 +156,20 @@ export default function ConicSectionsPage() {
       animationId = requestAnimationFrame(animate);
     };
 
-    animate();
+    // Start animation
+    animationId = requestAnimationFrame(animate);
     sceneRef.current = { scene, renderer, camera, animationId };
 
-    // Cleanup
+    // Cleanup function
     return () => {
-      if (animationId) {
+      if (animationId !== undefined) {
         cancelAnimationFrame(animationId);
       }
-      if (mountRef.current && renderer.domElement) {
+      if (
+        mountRef.current &&
+        renderer.domElement &&
+        mountRef.current.contains(renderer.domElement)
+      ) {
         mountRef.current.removeChild(renderer.domElement);
       }
       renderer.dispose();
@@ -191,7 +197,7 @@ export default function ConicSectionsPage() {
 
     if (conicType === "parabola") {
       const focus = calculateParabolaFocus(a, h, k);
-      const directrixY = calculateParabolaDirectrix(a, k);
+      const directrixY = calculateParabolaDirectrix(a, h, k); // Updated to include h parameter
 
       elements.push(
         { type: "point", x: h, y: k, label: "Vertex", color: "#3b82f6" },
@@ -513,7 +519,11 @@ export default function ConicSectionsPage() {
     <div
       className={`min-h-screen transition-colors duration-300 ${themeClasses}`}
       onClick={(e) => {
-        if (!(e.target as Element).closest(".export-menu")) {
+        // Close export menu when clicking outside
+        if (
+          !(e.target as Element).closest(".export-menu") &&
+          !(e.target as Element).closest("button[data-export-toggle]")
+        ) {
           setShowExportMenu(false);
         }
       }}
@@ -527,17 +537,18 @@ export default function ConicSectionsPage() {
               <h1 className="text-2xl font-bold">Conic Sections</h1>
               <div className="flex items-center space-x-2">
                 {/* Export/Share Button */}
-                <div className="relative export-menu">
+                <div className="relative">
                   <button
                     onClick={() => setShowExportMenu(!showExportMenu)}
                     className={`p-2 rounded-lg transition-colors ${darkMode ? "bg-gray-700 hover:bg-gray-600" : "bg-gray-200 hover:bg-gray-300"}`}
+                    data-export-toggle
                   >
                     <Share2 size={20} />
                   </button>
 
                   {showExportMenu && (
                     <div
-                      className={`absolute right-0 mt-2 w-48 rounded-lg shadow-lg border z-50 ${cardClasses}`}
+                      className={`export-menu absolute right-0 mt-2 w-48 rounded-lg shadow-lg border z-50 ${cardClasses}`}
                     >
                       <div className="py-1">
                         <button
@@ -545,7 +556,7 @@ export default function ConicSectionsPage() {
                             handleShareToClipboard();
                             setShowExportMenu(false);
                           }}
-                          className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 ${darkMode ? "hover:bg-gray-700" : ""} flex items-center`}
+                          className={`w-full text-left px-4 py-2 text-sm transition-colors ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"} flex items-center`}
                         >
                           <Share2 size={16} className="mr-2" />
                           Copy to Clipboard
@@ -555,7 +566,7 @@ export default function ConicSectionsPage() {
                             handleExportEquation();
                             setShowExportMenu(false);
                           }}
-                          className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 ${darkMode ? "hover:bg-gray-700" : ""} flex items-center`}
+                          className={`w-full text-left px-4 py-2 text-sm transition-colors ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"} flex items-center`}
                         >
                           <Download size={16} className="mr-2" />
                           Export Equation (JSON)
@@ -565,7 +576,7 @@ export default function ConicSectionsPage() {
                             handleExportImage();
                             setShowExportMenu(false);
                           }}
-                          className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 ${darkMode ? "hover:bg-gray-700" : ""} flex items-center`}
+                          className={`w-full text-left px-4 py-2 text-sm transition-colors ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"} flex items-center`}
                         >
                           <Download size={16} className="mr-2" />
                           Export Graph (PNG)
@@ -939,15 +950,28 @@ export default function ConicSectionsPage() {
               {mathematicalElements.map((element, index) => {
                 if (element.type === "point") {
                   // Convert mathematical coordinates to pixel coordinates
-                  const containerWidth = 100; // percentage
-                  const containerHeight = 90; // percentage of container
-                  const xPercent = ((element.x! + 15) / 30) * containerWidth;
-                  const yPercent = ((15 - element.y!) / 30) * containerHeight;
+                  // The chart has margins: left: 20, right: 30, top: 20, bottom: 20
+                  // Total chart area width and height need to be calculated properly
+                  const chartArea = {
+                    left: 5, // approximate percentage for left margin
+                    right: 2, // approximate percentage for right margin
+                    top: 2, // approximate percentage for top margin
+                    bottom: 8, // approximate percentage for bottom margin
+                  };
+
+                  // Calculate position within the actual chart plotting area
+                  const plotWidth = 100 - chartArea.left - chartArea.right;
+                  const plotHeight = 90 - chartArea.top - chartArea.bottom;
+
+                  const xPercent =
+                    chartArea.left + ((element.x! + 15) / 30) * plotWidth;
+                  const yPercent =
+                    chartArea.top + ((15 - element.y!) / 30) * plotHeight;
 
                   return (
                     <div key={index} className="absolute">
                       <div
-                        className="w-2 h-2 rounded-full border-2 border-white"
+                        className="w-3 h-3 rounded-full border-2 border-white"
                         style={{
                           backgroundColor: element.color,
                           left: `${xPercent}%`,
@@ -957,14 +981,14 @@ export default function ConicSectionsPage() {
                         }}
                       />
                       <div
-                        className={`text-xs font-medium px-1 py-0.5 rounded ${
+                        className={`text-xs font-medium px-1 py-0.5 rounded whitespace-nowrap ${
                           darkMode
                             ? "bg-gray-800 text-gray-200"
                             : "bg-white text-gray-800"
                         } border shadow-sm`}
                         style={{
                           left: `${xPercent}%`,
-                          top: `${yPercent - 8}%`,
+                          top: `${yPercent - 4}%`,
                           transform: "translate(-50%, -100%)",
                           color: element.color,
                         }}
@@ -975,9 +999,26 @@ export default function ConicSectionsPage() {
                   );
                 } else if (element.type === "line") {
                   // Draw directrix line for parabola
-                  const yPercent = ((15 - element.y!) / 30) * 90;
+                  const chartArea = {
+                    left: 5,
+                    right: 2,
+                    top: 2,
+                    bottom: 8,
+                  };
+
+                  const plotHeight = 90 - chartArea.top - chartArea.bottom;
+                  const yPercent =
+                    chartArea.top + ((15 - element.y!) / 30) * plotHeight;
+
                   return (
-                    <div key={index} className="absolute w-full">
+                    <div
+                      key={index}
+                      className="absolute"
+                      style={{
+                        left: `${chartArea.left}%`,
+                        right: `${chartArea.right}%`,
+                      }}
+                    >
                       <div
                         className="w-full border-t-2 border-dashed"
                         style={{
@@ -987,14 +1028,14 @@ export default function ConicSectionsPage() {
                         }}
                       />
                       <div
-                        className={`absolute text-xs font-medium px-1 py-0.5 rounded ${
+                        className={`absolute text-xs font-medium px-1 py-0.5 rounded whitespace-nowrap ${
                           darkMode
                             ? "bg-gray-800 text-gray-200"
                             : "bg-white text-gray-800"
                         } border shadow-sm`}
                         style={{
-                          left: "10%",
-                          top: `${yPercent - 2}%`,
+                          left: "5%",
+                          top: `${yPercent - 1}%`,
                           transform: "translateY(-100%)",
                           color: element.color,
                         }}
