@@ -1,27 +1,71 @@
 {
-  "name": "conic-sections-tool",
-  "version": "0.1.0",
+  "name": "interactive-conic-sections",
+  "version": "1.0.0",
+  "description": "An advanced educational web application for exploring and visualizing conic sections with real-time 3D demonstrations",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "next": "15.3.4"
+    "lucide-react": "^0.263.1",
+    "next": "^14.2.30",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "recharts": "^2.15.4",
+    "three": "^0.158.0"
   },
   "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
-    "eslint": "^9",
-    "eslint-config-next": "15.3.4",
-    "@eslint/eslintrc": "^3"
+    "@types/node": "^20.19.1",
+    "@types/react": "^18.3.23",
+    "@types/react-dom": "^18.3.7",
+    "@types/three": "^0.158.3",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.30",
+    "postcss": "^8.5.6",
+    "prettier": "^3.5.3",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.3"
+  },
+  "keywords": [
+    "conic-sections",
+    "mathematics",
+    "education",
+    "visualization",
+    "interactive",
+    "3d",
+    "parabola",
+    "ellipse",
+    "hyperbola",
+    "circle",
+    "nextjs",
+    "react",
+    "threejs"
+  ],
+  "author": {
+    "name": "Your Name",
+    "email": "your.email@example.com",
+    "url": "https://github.com/yourusername"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/interactive-conic-sections.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/interactive-conic-sections/issues"
+  },
+  "homepage": "https://github.com/yourusername/interactive-conic-sections#readme",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.8.0",
+    "npm": ">=8.0.0"
   }
 }
