@@ -1,3 +1,5 @@
+import * as THREE from "three";
+
 export interface ConicType {
   type: "parabola" | "circle" | "ellipse" | "hyperbola";
 }
@@ -50,4 +52,21 @@ export interface ExportData {
     | CircleParameters
     | HyperbolaParameters;
   timestamp: string;
+}
+
+export interface ThreeJSScene {
+  scene: THREE.Scene;
+  renderer: THREE.WebGLRenderer;
+  camera: THREE.PerspectiveCamera;
+  animationId?: number;
+}
+
+export interface ConicConfig {
+  type: ConicType["type"];
+  color: string;
+  description: string;
+  planeAngle: {
+    position: [number, number, number];
+    rotation: [number, number, number];
+  };
 }

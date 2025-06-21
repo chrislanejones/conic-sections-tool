@@ -1,278 +1,404 @@
-# 🎯 Interactive Conic Sections Tool
+# 🎯 Interactive Conic Sections Tool - Next.js App Router
 
 An advanced educational web application for exploring and visualizing conic sections (parabolas, circles, ellipses, and hyperbolas) with real-time 3D cone demonstrations and interactive parameter controls.
 
-![Conic Sections Demo](https://img.shields.io/badge/Demo-Live-brightgreen) ![Next.js](https://img.shields.io/badge/Next.js-13+-blue) ![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue) ![Three.js](https://img.shields.io/badge/Three.js-3D-orange)
+![Next.js](https://img.shields.io/badge/Next.js-14+-black) ![TypeScript](https://img.shields.io/badge/TypeScript-5+-blue) ![Three.js](https://img.shields.io/badge/Three.js-3D-orange) ![App Router](https://img.shields.io/badge/App%20Router-Ready-green)
 
 ## ✨ Features
 
 ### 🎮 Interactive Controls
 
-- **Real-time parameter adjustment** with smooth sliders
+- **Real-time parameter adjustment** with smooth sliders and accessibility support
 - **Four conic types**: Parabola, Circle, Ellipse, Hyperbola
-- **Toggle button interface** for easy conic type selection
-- **Reset to defaults** functionality
+- **Modern toggle interface** with focus management and keyboard navigation
+- **Reset to defaults** functionality with proper state management
 
 ### 📐 Mathematical Visualization
 
 - **Live equation display** with proper mathematical formatting
-- **Key points visualization**: Foci, vertices, centers, directrix
-- **Color-coded elements** for easy identification
-- **Responsive 2D graphing** with Recharts
+- **Key points visualization**: Foci, vertices, centers, directrix with color coding
+- **Responsive 2D graphing** with Recharts and mathematical overlays
+- **Export capabilities** for equations and high-quality graphs
 
 ### 🎨 3D Cone Demonstration
 
-- **Interactive 3D cone** showing how each conic section forms
-- **Play/pause animation controls** for the rotating cone
+- **Interactive 3D cone** showing how each conic section forms geometrically
+- **Play/pause animation controls** with smooth performance optimization
 - **Dynamic cutting plane** that changes based on selected conic type
 - **Color-coded planes** matching mathematical conventions
 
-### 🌙 User Experience
+### 🌙 Modern User Experience
 
-- **Dark/Light mode toggle** with smooth transitions
-- **Export/Share functionality**:
-  - Copy equation to clipboard
-  - Export equation as JSON
-  - Export graph as high-quality PNG
-- **Responsive design** for desktop and tablet use
-- **Professional UI** with clean, modern styling
+- **Dark/Light mode toggle** with system preference detection
+- **Responsive design** optimized for desktop, tablet, and mobile
+- **Accessibility features** including ARIA labels, focus management, and keyboard navigation
+- **Professional UI** with smooth animations and micro-interactions
 
 ### 📊 Educational Value
 
-- **Mathematical definitions** for each conic type
-- **Parameter explanations** with real-time feedback
-- **Visual learning** through 3D cone intersections
-- **Export capabilities** for homework and presentations
+- **Mathematical definitions** with contextual explanations
+- **Parameter impact visualization** with real-time feedback
+- **3D geometric understanding** through interactive cone intersections
+- **Export tools** for homework, presentations, and teaching materials
 
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Node.js 16.8 or later
-- npm or yarn package manager
-
-### Installation
-
-1. **Clone the repository**
-
-   ```bash
-   git clone https://github.com/yourusername/conic-sections-tool.git
-   cd conic-sections-tool
-   ```
-
-2. **Install dependencies**
-
-   ```bash
-   npm install
-   # or
-   yarn install
-   ```
-
-3. **Run the development server**
-
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   ```
-
-4. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000)
-
-## 📦 Dependencies
-
-### Core Framework
-
-- **Next.js 13+** - React framework with App Router
-- **React 18** - UI library
-- **TypeScript** - Type safety and better development experience
-
-### Visualization Libraries
-
-- **Three.js** - 3D cone visualization and animations
-- **Recharts** - Interactive 2D graphing and charts
-- **Lucide React** - Modern icon library
-
-### Styling
-
-- **Tailwind CSS** - Utility-first CSS framework
-- **CSS Modules** - Scoped styling (optional)
-
-## 🏗️ Project Structure
+## 🏗️ Modern Next.js App Router Structure
 
 ```
 conic-sections-tool/
-├── pages/
-│   ├── index.tsx          # Main application component
-│   ├── _app.tsx           # Next.js app wrapper
-│   └── _document.tsx      # HTML document structure
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx          # Root layout with metadata
+│   │   ├── page.tsx            # Main application page
+│   │   ├── globals.css         # Global styles with Tailwind
+│   │   ├── loading.tsx         # Loading UI component
+│   │   ├── error.tsx           # Error boundary component
+│   │   ├── not-found.tsx       # 404 page
+│   │   ├── sitemap.ts          # Dynamic sitemap generation
+│   │   └── robots.ts           # SEO robots configuration
+│   ├── components/
+│   │   ├── ConicSelector.tsx   # Conic type selection component
+│   │   └── ParameterControls.tsx # Parameter slider controls
+│   ├── utils/
+│   │   ├── mathUtils.ts        # Mathematical calculations
+│   │   ├── exportUtils.ts      # Export and sharing utilities
+│   │   └── threeUtils.ts       # Three.js helper functions
+│   ├── types/
+│   │   └── index.ts            # TypeScript type definitions
+│   └── lib/
+│       └── constants.ts        # Application constants
 ├── public/
-│   ├── favicon.ico        # App icon
-│   └── images/            # Static images
-├── styles/
-│   ├── globals.css        # Global styles and Tailwind imports
-│   └── components/        # Component-specific styles
-├── components/            # Reusable React components (future)
-├── utils/                 # Utility functions (future)
-├── types/                 # TypeScript type definitions
-├── package.json
-├── tailwind.config.js     # Tailwind configuration
-├── tsconfig.json          # TypeScript configuration
-└── README.md
+│   ├── manifest.json          # PWA manifest
+│   ├── favicon.ico            # Favicon
+│   └── images/               # Static assets
+├── next.config.js            # Next.js configuration
+├── tailwind.config.js        # Tailwind CSS configuration
+├── tsconfig.json            # TypeScript configuration
+└── package.json             # Dependencies and scripts
 ```
 
-## 🎓 Educational Applications
+## 🚀 Quick Start
 
-### For Students
+### Prerequisites
 
-- **Visual Learning**: See how mathematical equations translate to geometric shapes
-- **Parameter Exploration**: Understand how changing values affects curve properties
-- **3D Understanding**: Grasp the fundamental relationship between all conic sections
-- **Export Tools**: Create materials for presentations and homework
+- **Node.js 18.17** or later
+- **npm**, **yarn**, or **pnpm** package manager
 
-### For Educators
+### Installation
 
-- **Classroom Demonstrations**: Project live parameter changes during lessons
-- **Assignment Creation**: Export custom problems and solutions
-- **Interactive Learning**: Engage students with hands-on mathematical exploration
-- **Assessment Support**: Generate examples for tests and quizzes
+1. **Create the project**
 
-### For Self-Study
+   ```bash
+   npx create-next-app@latest conic-sections-tool --typescript --tailwind --eslint --app
+   cd conic-sections-tool
+   ```
 
-- **Concept Reinforcement**: Practice identifying conic section properties
-- **Visual References**: Compare different parameter combinations
-- **Mathematical Definitions**: Learn formal definitions with visual context
+2. **Install additional dependencies**
+
+   ```bash
+   npm install three @types/three recharts lucide-react
+   ```
+
+3. **Set up the App Router structure**
+
+   ```bash
+   mkdir -p src/{components,utils,types,lib}
+   ```
+
+4. **Copy the provided files**
+
+   - Replace `src/app/` files with the provided App Router structure
+   - Add utility functions to `src/utils/`
+   - Add type definitions to `src/types/`
+   - Add components to `src/components/`
+
+5. **Run the development server**
+
+   ```bash
+   npm run dev
+   ```
+
+6. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## 📦 Key Dependencies
+
+### Core Framework
+
+- **Next.js 14+** - React framework with App Router
+- **React 18** - UI library with concurrent features
+- **TypeScript 5+** - Type safety and enhanced developer experience
+
+### Visualization & Math
+
+- **Three.js** - 3D cone visualization and WebGL rendering
+- **Recharts** - Interactive 2D mathematical graphing
+- **Custom math utilities** - Conic section calculations
+
+### UI & Styling
+
+- **Tailwind CSS** - Utility-first CSS framework with custom mathematical styling
+- **Lucide React** - Modern icon library with consistent design
+- **Custom CSS components** - Mathematical notation and visualization styles
+
+## 🎯 App Router Advantages
+
+### Performance Benefits
+
+- **Server Components** by default for better initial load times
+- **Streaming** support for progressive page loading
+- **Automatic code splitting** for optimal bundle sizes
+- **Built-in optimizations** for fonts, images, and scripts
+
+### Developer Experience
+
+- **Nested layouts** for better component organization
+- **File-based routing** with enhanced conventions
+- **TypeScript-first** approach with better type inference
+- **Modern React patterns** with Server and Client Components
+
+### SEO & Accessibility
+
+- **Enhanced metadata API** with type safety
+- **Automatic sitemap generation** for better search indexing
+- **Built-in accessibility features** with proper ARIA support
+- **Open Graph optimization** for social media sharing
 
 ## 🔧 Configuration
 
-### Tailwind CSS Setup
-
-The project uses Tailwind CSS for styling. Configuration is in `tailwind.config.js`:
+### Tailwind CSS Customization
 
 ```javascript
+// tailwind.config.js
 module.exports = {
-  content: [
-    "./pages/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   darkMode: "class",
   theme: {
     extend: {
-      // Custom theme extensions
+      colors: {
+        parabola: "#3b82f6",
+        ellipse: "#22c55e",
+        hyperbola: "#f97316",
+        circle: "#ef4444",
+      },
+      animation: {
+        "spin-slow": "spin 3s linear infinite",
+      },
     },
   },
-  plugins: [],
 };
 ```
 
 ### TypeScript Configuration
-
-Strict TypeScript settings in `tsconfig.json` ensure code quality:
 
 ```json
 {
   "compilerOptions": {
     "target": "es5",
     "lib": ["dom", "dom.iterable", "es6"],
-    "allowJs": true,
-    "skipLibCheck": true,
     "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true
-  }
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
 }
 ```
 
-## 🎯 Mathematical Formulas
+### Next.js App Router Features
 
-The application supports these conic section equations:
-
-### Parabola
-
-- **Vertex Form**: `y = a(x - h)² + k`
-- **Parameters**:
-  - `a`: Width and direction (positive = up, negative = down)
-  - `h`: Horizontal shift of vertex
-  - `k`: Vertical shift of vertex
-
-### Circle
-
-- **Standard Form**: `(x - h)² + (y - k)² = r²`
-- **Parameters**:
-  - `r`: Radius
-  - `h, k`: Center coordinates
-
-### Ellipse
-
-- **Standard Form**: `(x - h)²/a² + (y - k)²/b² = 1`
-- **Parameters**:
-  - `a`: Horizontal semi-axis
-  - `b`: Vertical semi-axis
-  - `h, k`: Center coordinates
-
-### Hyperbola
-
-- **Standard Form**: `(x - h)²/a² - (y - k)²/b² = 1`
-- **Parameters**:
-  - `a`: Horizontal scale factor
-  - `b`: Vertical scale factor
-  - `h, k`: Center coordinates
-
-## 🛠️ Development
-
-### Building for Production
-
-```bash
-npm run build
-npm start
+```javascript
+// next.config.js
+const nextConfig = {
+  experimental: {
+    appDir: true, // Enable App Router
+  },
+  webpack: (config) => {
+    // Three.js optimization
+    config.module.rules.push({
+      test: /\.(glsl|vs|fs|vert|frag)$/,
+      use: ["raw-loader"],
+    });
+    return config;
+  },
+};
 ```
 
-### Code Quality
+## 🎓 Educational Applications
+
+### For Students
+
+- **Visual Mathematical Learning** - See equations transform into geometric shapes
+- **Interactive Parameter Exploration** - Understand how mathematical changes affect visual output
+- **3D Geometric Intuition** - Grasp the fundamental cone-cutting relationships
+- **Professional Export Tools** - Create materials for assignments and presentations
+
+### For Educators
+
+- **Classroom Integration** - Project live demonstrations during mathematical instruction
+- **Curriculum Support** - Generate custom examples and problem sets
+- **Student Engagement** - Hands-on exploration of abstract mathematical concepts
+- **Assessment Tools** - Create visual problems and export solutions
+
+### For Self-Study
+
+- **Concept Reinforcement** - Practice identifying mathematical properties visually
+- **Mathematical Connections** - See relationships between algebraic and geometric forms
+- **Reference Materials** - Export custom configurations for future study
+
+## 🌐 Deployment Options
+
+### Vercel (Recommended for App Router)
+
+```bash
+# Deploy with zero configuration
+vercel
+
+# Or connect GitHub repository for automatic deployments
+```
+
+### Netlify
+
+```bash
+# Build command
+npm run build
+
+# Publish directory
+.next
+```
+
+### Docker Deployment
+
+```dockerfile
+FROM node:18-alpine AS base
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+
+FROM base AS build
+COPY . .
+RUN npm run build
+
+FROM base AS runtime
+COPY --from=build /app/.next ./.next
+EXPOSE 3000
+CMD ["npm", "start"]
+```
+
+## 📱 Progressive Web App Features
+
+### Manifest Configuration
+
+```json
+{
+  "name": "Interactive Conic Sections Tool",
+  "short_name": "Conic Sections",
+  "description": "Explore mathematical conic sections with 3D visualizations",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6"
+}
+```
+
+### Service Worker Support
+
+- **Offline functionality** for core mathematical features
+- **Caching strategy** for optimal performance
+- **Background sync** for export functionality
+
+## 🧪 Testing & Quality
+
+### Testing Setup
+
+```bash
+# Install testing dependencies
+npm install -D jest @testing-library/react @testing-library/jest-dom
+
+# Run tests
+npm test
+```
+
+### Code Quality Tools
 
 ```bash
 # Type checking
 npm run type-check
 
-# Linting
+# Linting with ESLint
 npm run lint
 
-# Formatting
+# Code formatting with Prettier
 npm run format
 ```
 
-### Adding New Features
+### Performance Monitoring
 
-1. Create feature branch: `git checkout -b feature/new-feature`
-2. Implement changes with TypeScript
-3. Add appropriate tests
-4. Update documentation
-5. Submit pull request
+- **Core Web Vitals** tracking with Next.js built-in analytics
+- **Bundle analysis** for optimization opportunities
+- **Lighthouse scores** for accessibility and performance
+
+## 🔒 Security & Best Practices
+
+### Security Headers
+
+- **Content Security Policy** for XSS protection
+- **HTTPS enforcement** with HSTS headers
+- **Frame protection** against clickjacking
+- **Content type validation** for uploaded files
+
+### Accessibility Features
+
+- **Keyboard navigation** throughout the application
+- **Screen reader support** with proper ARIA labels
+- **Focus management** for modal dialogs and dynamic content
+- **Color contrast** meeting WCAG 2.1 AA standards
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our contributing guidelines:
+### Development Workflow
 
-1. **Fork the repository**
-2. **Create a feature branch**
-3. **Make your changes**
-4. **Add tests if applicable**
-5. **Update documentation**
-6. **Submit a pull request**
+1. **Fork the repository** and create a feature branch
+2. **Follow TypeScript best practices** with strict type checking
+3. **Add tests** for new mathematical functions
+4. **Update documentation** for new features
+5. **Submit pull request** with detailed description
 
-### Code Style
+### Code Style Guidelines
 
-- Use TypeScript for all new code
-- Follow the existing component structure
-- Use Tailwind CSS for styling
-- Add comments for complex mathematical calculations
-- Ensure accessibility standards
+- **Use TypeScript** for all new code with strict typing
+- **Follow App Router patterns** for file organization
+- **Implement accessibility features** for all interactive elements
+- **Add JSDoc comments** for complex mathematical functions
+
+## 🔮 Roadmap & Future Enhancements
+
+### Planned Features
+
+- [ ] **Advanced Mathematical Analysis** - Eccentricity calculations and asymptotes
+- [ ] **Animation Presets** - Common demonstration scenarios for educators
+- [ ] **Multi-language Support** - Internationalization for global education
+- [ ] **Collaborative Features** - Share and remix mathematical configurations
+- [ ] **Advanced Export Options** - LaTeX output and vector graphics
+- [ ] **Integration APIs** - Connect with learning management systems
+
+### Technical Improvements
+
+- [ ] **Enhanced Performance** - WebGL optimizations and better rendering
+- [ ] **Mobile Responsiveness** - Touch-optimized controls and gestures
+- [ ] **Offline Capabilities** - Full PWA functionality with service workers
+- [ ] **Advanced Accessibility** - Voice navigation and screen reader enhancements
+
+## 📞 Support & Community
+
+- **Documentation**: Comprehensive guides and API reference
+- **GitHub Issues**: Bug reports and feature requests
+- **Discussions**: Community forum for educators and developers
+- **Discord**: Real-time chat for development collaboration
 
 ## 📝 License
 
@@ -280,34 +406,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- **Three.js** community for excellent 3D visualization capabilities
-- **Recharts** team for robust charting components
-- **Next.js** team for the amazing React framework
-- **Tailwind CSS** for the utility-first styling approach
-- **Mathematics educators** who inspired this educational tool
-
-## 📞 Support
-
-- **Documentation**: Check this README and inline code comments
-- **Issues**: Create an issue on GitHub for bugs or feature requests
-- **Discussions**: Use GitHub Discussions for questions and ideas
-- **Email**: [your-email@example.com] for direct support
-
-## 🔮 Future Enhancements
-
-- [ ] **Mobile responsive design** for phone usage
-- [ ] **Asymptotes visualization** for hyperbolas
-- [ ] **Eccentricity display** and calculations
-- [ ] **Animation presets** for common demonstrations
-- [ ] **Keyboard shortcuts** for power users
-- [ ] **Save/Load configurations** functionality
-- [ ] **Multi-language support** for international users
-- [ ] **Accessibility improvements** for screen readers
-- [ ] **Performance optimizations** for complex calculations
-- [ ] **Integration with learning management systems**
+- **Next.js Team** for the revolutionary App Router architecture
+- **Three.js Community** for exceptional 3D visualization capabilities
+- **Recharts Team** for robust React charting components
+- **Educational Technology Community** for inspiration and feedback
+- **Mathematics Educators** worldwide who make learning interactive and engaging
 
 ---
 
-**Made with ❤️ for mathematics education**
+**🎓 Transforming Mathematical Education Through Interactive Technology**
 
-_Transform the way students learn conic sections through interactive visualization and hands-on exploration._
+_Built with modern web technologies to make conic sections accessible, engaging, and visually compelling for learners worldwide._
