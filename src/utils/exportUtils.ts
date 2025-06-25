@@ -1,83 +1,53 @@
-import type { ExportData } from "@/types";
+import Plotly from "plotly.js-dist-min";
 
-export const exportToJSON = (data: ExportData): void => {
-  const blob = new Blob([JSON.stringify(data, null, 2)], {
-    type: "application/json",
-  });
-  const url = URL.createObjectURL(blob);
+export async function downloadPlotlyChart(
+  id = "plotly-chart",
+  format: "png" | "svg" = "png"
+) {
+  const chartDiv = document.getElementById(id);
+  if (!chartDiv) {
+    console.warn(`No element with id '${id}' found.`);
+    return;
+  }
+
+  const fileOpts = {
+    format,
+    filename: `conic-plot-${new Date().toISOString()}`,
+    height: chartDiv.clientHeight || 600,
+    width: chartDiv.clientWidth || 800,
+    scale: 2,
+  };
+
+  try {
+    await Plotly.downloadImage(chartDiv as any, fileOpts);
+  } catch (err) {
+    console.error("Plotly download failed:", err);
+  }
+}
+
+export function exportPlotDataAsCSV(data: any[], filename = "conic-data.csv") {
+  if (!data?.length) return;
+
+  const x = data[0]?.x || [];
+  const y = data[0]?.y || [];
+
+  let csv = "x,y\n";
+  for (let i = 0; i < x.length; i++) {
+    csv += `${x[i]},${y[i]}\n`;
+  }
+
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
   const link = document.createElement("a");
-  link.href = url;
-  link.download = `${data.type}-equation-${new Date().toISOString().slice(0, 10)}.json`;
+  link.href = URL.createObjectURL(blob);
+  link.setAttribute("download", filename);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-  URL.revokeObjectURL(url);
-};
+}
 
-export const shareToClipboard = async (text: string): Promise<boolean> => {
-  try {
-    if (navigator.clipboard && window.isSecureContext) {
-      await navigator.clipboard.writeText(text);
-      return true;
-    } else {
-      // Fallback for older browsers or non-HTTPS contexts
-      const textArea = document.createElement("textarea");
-      textArea.value = text;
-      textArea.style.position = "fixed";
-      textArea.style.left = "-999999px";
-      textArea.style.top = "-999999px";
-      document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
-      const success = document.execCommand("copy");
-      document.body.removeChild(textArea);
-      return success;
-    }
-  } catch (error) {
-    console.error("Failed to copy to clipboard:", error);
-    return false;
-  }
-};
-
-export const generateShareText = (
-  conicType: string,
-  equation: string,
-  parameters: any
-): string => {
-  const paramString = Object.entries(parameters)
-    .map(([key, value]) => `${key} = ${value}`)
-    .join(", ");
-
-  return `🔢 Check out this ${conicType}!
-
-📐 Equation: ${equation}
-
-⚙️ Parameters: ${paramString}
-
-🎯 Created with Interactive Conic Sections Tool
-🌐 https://conic-sections.vercel.app
-
-#Mathematics #ConicSections #Education #Interactive`;
-};
-
-export const exportImage = (
-  canvas: HTMLCanvasElement,
-  filename: string
-): void => {
-  canvas.toBlob(
-    (blob) => {
-      if (blob) {
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = `${filename}-${new Date().toISOString().slice(0, 10)}.png`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-      }
-    },
-    "image/png",
-    0.95
+export function copyToClipboard(text: string) {
+  navigator.clipboard.writeText(text).then(
+    () => console.log("Copied to clipboard"),
+    (err) => console.error("Clipboard copy failed:", err)
   );
-};
+}

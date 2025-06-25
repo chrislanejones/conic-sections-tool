@@ -1,8 +1,6 @@
 import * as THREE from "three";
 
-export interface ConicType {
-  type: "parabola" | "circle" | "ellipse" | "hyperbola";
-}
+export type ConicType = "parabola" | "circle" | "ellipse" | "hyperbola";
 
 export interface ParabolaParameters {
   a: number;
@@ -30,6 +28,12 @@ export interface HyperbolaParameters {
   k: number;
 }
 
+export type ConicParameters =
+  | ParabolaParameters
+  | EllipseParameters
+  | CircleParameters
+  | HyperbolaParameters;
+
 export interface MathematicalElement {
   type: "point" | "line";
   x?: number;
@@ -44,13 +48,9 @@ export interface DataPoint {
 }
 
 export interface ExportData {
-  type: string;
+  type: ConicType;
   equation: string;
-  parameters:
-    | ParabolaParameters
-    | EllipseParameters
-    | CircleParameters
-    | HyperbolaParameters;
+  parameters: ConicParameters;
   timestamp: string;
 }
 
@@ -62,7 +62,7 @@ export interface ThreeJSScene {
 }
 
 export interface ConicConfig {
-  type: ConicType["type"];
+  type: ConicType;
   color: string;
   description: string;
   planeAngle: {
