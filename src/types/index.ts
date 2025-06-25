@@ -76,3 +76,8 @@ export interface ConicConfig {
     rotation: [number, number, number];
   };
 }
+
+export interface PlotlyChartProps {
+  type: ConicType;
+  params: ConicParams;
+}

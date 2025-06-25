@@ -2,7 +2,6 @@
   "name": "interactive-conic-sections",
   "version": "1.0.0",
   "description": "An advanced educational web application for exploring and visualizing conic sections with real-time 3D demonstrations",
-  "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",

@@ -25,10 +25,18 @@ const PlotlyChart = dynamic(() => import("@/components/PlotlyChart"), {
 
 export default function HomePage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const sceneControlsRef = useRef<{
+    pauseAnimation: () => void;
+    playAnimation: () => void;
+    isPlaying: () => boolean;
+    cleanup: () => void;
+  } | null>(null);
+
   const { resolvedTheme } = useTheme();
   const isDarkMode = resolvedTheme === "dark";
 
   const [conicType, setConicType] = useState<ConicType>("parabola");
+  const [isAnimationPlaying, setIsAnimationPlaying] = useState(true);
   const [params, setParams] = useState<EllipseParameters>({
     a: 1,
     b: 1,
@@ -47,12 +55,13 @@ export default function HomePage() {
 
   useEffect(() => {
     if (canvasRef.current) {
-      const { cleanup } = setupThreeScene(
+      const controls = setupThreeScene(
         canvasRef.current,
         conicType,
         isDarkMode
       );
-      return cleanup;
+      sceneControlsRef.current = controls;
+      return controls.cleanup;
     }
   }, [conicType, isDarkMode]);
 
@@ -71,6 +80,18 @@ export default function HomePage() {
   const handleReset = () => {
     console.log("🔄 Reset button clicked");
     setParams({ a: 1, b: 1, h: 0, k: 0 });
+  };
+
+  const toggleAnimation = () => {
+    if (sceneControlsRef.current) {
+      if (isAnimationPlaying) {
+        sceneControlsRef.current.pauseAnimation();
+        setIsAnimationPlaying(false);
+      } else {
+        sceneControlsRef.current.playAnimation();
+        setIsAnimationPlaying(true);
+      }
+    }
   };
 
   return (
@@ -130,22 +151,41 @@ export default function HomePage() {
               </h4>
               <button
                 className="p-1.5 rounded-md transition-colors bg-muted hover:bg-muted/80 text-muted-foreground"
-                title="Pause animation"
+                onClick={toggleAnimation}
+                title={
+                  isAnimationPlaying ? "Pause animation" : "Play animation"
+                }
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <rect width="4" height="16" x="6" y="4"></rect>
-                  <rect width="4" height="16" x="14" y="4"></rect>
-                </svg>
+                {isAnimationPlaying ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect width="4" height="16" x="6" y="4"></rect>
+                    <rect width="4" height="16" x="14" y="4"></rect>
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polygon points="5,3 19,12 5,21"></polygon>
+                  </svg>
+                )}
               </button>
             </div>
             <div className="flex justify-center mb-4">

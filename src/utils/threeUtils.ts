@@ -17,10 +17,14 @@ export function createDoubleCone(darkMode: boolean = true) {
   const cone1 = new THREE.Mesh(coneGeometry1, coneMaterial);
   const cone2 = new THREE.Mesh(coneGeometry2, coneMaterial);
 
-  // Position cones so their points face each other
-  cone1.position.y = 1.5; // Top cone pointing down
-  cone2.position.y = -1.5; // Bottom cone pointing up
-  cone2.rotation.x = Math.PI; // Flip bottom cone so point faces up
+  // Position cones so their points touch in the middle
+  // Top cone: point down, base up
+  cone1.position.y = 1.5; // Move up so point is at y=0
+  cone1.rotation.x = 0; // Default orientation (point down)
+
+  // Bottom cone: point up, base down
+  cone2.position.y = -1.5; // Move down so point is at y=0
+  cone2.rotation.x = Math.PI; // Flip 180° so point faces up
 
   return { cone1, cone2 };
 }
@@ -36,23 +40,23 @@ export function createCuttingPlane(
   switch (type) {
     case "circle":
       color = 0xef4444; // red
-      position = [0, 0.5, 0];
+      position = [0, 0.8, 0]; // Cut through upper cone horizontally
       rotation = [Math.PI / 2, 0, 0]; // Horizontal cut
       break;
     case "ellipse":
       color = 0x22c55e; // green
-      position = [0, 0.2, 0];
+      position = [0, 0.5, 0]; // Cut through upper cone at angle
       rotation = [Math.PI / 3, 0, 0]; // Angled cut
       break;
     case "parabola":
       color = 0x3b82f6; // blue
-      position = [0, -0.2, 0];
-      rotation = [Math.PI / 2.2, 0, 0]; // Parallel to cone side
+      position = [0, 0.2, 0]; // Cut near the point, parallel to cone side
+      rotation = [Math.PI / 2.3, 0, 0]; // Parallel to cone's side
       break;
     case "hyperbola":
       color = 0xf97316; // orange
-      position = [0, 0, 0];
-      rotation = [Math.PI / 6, 0, 0]; // Steep angle through both cones
+      position = [0, 0, 0]; // Cut through the touching points
+      rotation = [Math.PI / 8, 0, 0]; // Steep angle through both cones
       break;
   }
 
@@ -135,6 +139,20 @@ export function setupThreeScene(
     scene,
     renderer,
     camera,
+    // Animation control functions
+    pauseAnimation: () => {
+      isAnimating = false;
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+    },
+    playAnimation: () => {
+      if (!isAnimating) {
+        isAnimating = true;
+        animate();
+      }
+    },
+    isPlaying: () => isAnimating,
     cleanup: () => {
       isAnimating = false;
       if (animationId) {
