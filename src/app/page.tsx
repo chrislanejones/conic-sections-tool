@@ -1,4 +1,3 @@
-// src/app/page.tsx
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
@@ -52,6 +51,23 @@ export default function ConicSectionsPage() {
   const [mathematicalElements, setMathematicalElements] = useState<
     MathematicalElement[]
   >([]);
+
+  const chartRef = useRef<HTMLDivElement>(null);
+  const [canvasFocusY, setCanvasFocusY] = useState(0);
+  const [canvasDirectrixY, setCanvasDirectrixY] = useState(0);
+
+  useEffect(() => {
+    const chartHeight = chartRef.current?.offsetHeight || 600;
+    const originY = chartHeight / 2;
+    const scaleY = chartHeight / 30;
+
+    const f = calculateParabolaFocus(a, h, k);
+    const d = calculateParabolaDirectrix(a, h, k);
+
+    setCanvasFocusY(originY - f.y * scaleY);
+    setCanvasDirectrixY(originY - d * scaleY);
+  }, [a, h, k]);
+
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [isAnimationPlaying, setIsAnimationPlaying] = useState(true);
 
@@ -63,9 +79,9 @@ export default function ConicSectionsPage() {
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(darkMode ? 0x1f2937 : 0xf9fafb);
 
-    const camera = new THREE.PerspectiveCamera(75, 250 / 250, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(80, 200 / 200, 0.5, 2000);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(250, 250);
+    renderer.setSize(300, 300);
 
     // Clear previous renderer
     if (mountRef.current.firstChild) {
@@ -88,8 +104,9 @@ export default function ConicSectionsPage() {
     const cone2 = new THREE.Mesh(coneGeometry2, coneMaterial);
 
     cone1.position.y = 1.5;
+    cone1.rotation.x = Math.PI;
     cone2.position.y = -1.5;
-    cone2.rotation.x = Math.PI;
+    cone2.rotation.x = Math.PI * 2;
 
     scene.add(cone1);
     scene.add(cone2);
@@ -103,27 +120,27 @@ export default function ConicSectionsPage() {
     switch (conicType) {
       case "circle":
         planeColor = 0xef4444; // red
-        planePosition = [0, 0.5, 0];
-        planeRotation = [Math.PI / 2, 0, 0];
+        planePosition = [0, 1.0, 0]; // ↑ moved higher
+        planeRotation = [Math.PI / 2, 0, 0]; // flat horizontal
         break;
       case "ellipse":
         planeColor = 0x22c55e; // green
-        planePosition = [0, 0.2, 0];
-        planeRotation = [Math.PI / 3, 0, 0];
+        planePosition = [0, 0.8, 0]; // ↑ moved higher
+        planeRotation = [Math.PI / 3, 0, 0]; // angled slice
         break;
       case "parabola":
         planeColor = 0x3b82f6; // blue
-        planePosition = [0, -0.2, 0];
-        planeRotation = [Math.PI / 2.2, 0, 0];
+        planePosition = [0, 1.2, 1.5]; // ↑ moved higher
+        planeRotation = [Math.PI / -3, 0, 0]; // angled slice
         break;
       case "hyperbola":
         planeColor = 0xf97316; // orange
-        planePosition = [0, 0, 0];
-        planeRotation = [Math.PI / 6, 0, 0];
+        planePosition = [0, 0.2, 0.4]; // ↑ slice through both cones
+        planeRotation = [Math.PI / 0.1, 0, 0]; // shallow angle
         break;
       default:
         planeColor = 0x3b82f6;
-        planePosition = [0, 0, 0];
+        planePosition = [0, 0.8, 0];
         planeRotation = [0, 0, 0];
     }
 
@@ -197,7 +214,8 @@ export default function ConicSectionsPage() {
 
     if (conicType === "parabola") {
       const focus = calculateParabolaFocus(a, h, k);
-      const directrixY = calculateParabolaDirectrix(a, h, k); // Updated to include h parameter
+      const p = 1 / (4 * a); // Calculate p directly since function signature is inconsistent
+      const directrixY = k - p; // Directrix calculation
 
       elements.push(
         { type: "point", x: h, y: k, label: "Vertex", color: "#3b82f6" },
@@ -821,13 +839,8 @@ export default function ConicSectionsPage() {
               <div
                 ref={mountRef}
                 className={`border rounded-lg ${darkMode ? "border-gray-600" : "border-gray-300"}`}
-                style={{ width: "250px", height: "250px" }}
+                style={{ width: "300px", height: "300px" }}
               />
-              <div
-                className={`text-xs mt-2 text-center ${darkMode ? "text-gray-400" : "text-gray-500"}`}
-              >
-                Interactive 3D cone showing how a {conicType} forms
-              </div>
             </div>
 
             <div
@@ -949,24 +962,24 @@ export default function ConicSectionsPage() {
             <div className="absolute inset-0 pointer-events-none">
               {mathematicalElements.map((element, index) => {
                 if (element.type === "point") {
-                  // Convert mathematical coordinates to pixel coordinates
-                  // The chart has margins: left: 20, right: 30, top: 20, bottom: 20
-                  // Total chart area width and height need to be calculated properly
-                  const chartArea = {
-                    left: 5, // approximate percentage for left margin
-                    right: 2, // approximate percentage for right margin
-                    top: 2, // approximate percentage for top margin
-                    bottom: 8, // approximate percentage for bottom margin
-                  };
+                  // Much more accurate mapping based on actual Recharts rendering
+                  // The chart domain is [-15, 15] for both x and y
+                  // Map to the actual plotting area, not the entire container
 
-                  // Calculate position within the actual chart plotting area
-                  const plotWidth = 100 - chartArea.left - chartArea.right;
-                  const plotHeight = 90 - chartArea.top - chartArea.bottom;
+                  // Approximate the actual chart plotting area margins
+                  const leftMargin = 8; // Percentage for Y-axis labels and margin
+                  const rightMargin = 4; // Percentage for right margin
+                  const topMargin = 4; // Percentage for top margin
+                  const bottomMargin = 12; // Percentage for X-axis labels and margin
 
+                  const chartWidth = 100 - leftMargin - rightMargin;
+                  const chartHeight = 100 - topMargin - bottomMargin;
+
+                  // Convert from mathematical coordinates to screen percentages
                   const xPercent =
-                    chartArea.left + ((element.x! + 15) / 30) * plotWidth;
+                    leftMargin + ((element.x! + 15) / 30) * chartWidth;
                   const yPercent =
-                    chartArea.top + ((15 - element.y!) / 30) * plotHeight;
+                    topMargin + ((15 - element.y!) / 30) * chartHeight;
 
                   return (
                     <div key={index} className="absolute">
@@ -975,7 +988,7 @@ export default function ConicSectionsPage() {
                         style={{
                           backgroundColor: element.color,
                           left: `${xPercent}%`,
-                          top: `${yPercent}%`,
+                          top: `${yPercent - 3}%`,
                           transform: "translate(-50%, -50%)",
                           zIndex: 10,
                         }}
@@ -988,7 +1001,7 @@ export default function ConicSectionsPage() {
                         } border shadow-sm`}
                         style={{
                           left: `${xPercent}%`,
-                          top: `${yPercent - 4}%`,
+                          top: `${yPercent - 3}%`,
                           transform: "translate(-50%, -100%)",
                           color: element.color,
                         }}
@@ -998,25 +1011,23 @@ export default function ConicSectionsPage() {
                     </div>
                   );
                 } else if (element.type === "line") {
-                  // Draw directrix line for parabola
-                  const chartArea = {
-                    left: 5,
-                    right: 2,
-                    top: 2,
-                    bottom: 8,
-                  };
+                  // Draw directrix line using the same coordinate system
+                  const leftMargin = 8;
+                  const rightMargin = 4;
+                  const topMargin = 4;
+                  const bottomMargin = 12;
+                  const chartHeight = 100 - topMargin - bottomMargin;
 
-                  const plotHeight = 90 - chartArea.top - chartArea.bottom;
                   const yPercent =
-                    chartArea.top + ((15 - element.y!) / 30) * plotHeight;
+                    topMargin + ((15 - element.y!) / 30) * chartHeight;
 
                   return (
                     <div
                       key={index}
                       className="absolute"
                       style={{
-                        left: `${chartArea.left}%`,
-                        right: `${chartArea.right}%`,
+                        left: `${leftMargin}%`,
+                        right: `${rightMargin}%`,
                       }}
                     >
                       <div

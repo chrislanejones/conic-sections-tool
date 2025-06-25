@@ -1,14 +1,14 @@
 import type { DataPoint } from "@/types";
 
-export const calculateParabolaFocus = (a: number, h: number, k: number) => {
+export function calculateParabolaFocus(a: number, h: number, k: number) {
   const p = 1 / (4 * a);
   return { x: h, y: k + p };
-};
+}
 
-export const calculateParabolaDirectrix = (a: number, k: number) => {
+export function calculateParabolaDirectrix(a: number, h: number, k: number) {
   const p = 1 / (4 * a);
-  return k - p;
-};
+  return k - p; // horizontal line: y = k - p
+}
 
 export const calculateEllipseFoci = (
   a: number,
