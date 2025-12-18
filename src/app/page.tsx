@@ -4,7 +4,6 @@ import React, { useState, Suspense, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
 import { EllipseParameters } from "@/types";
-import { generateConicPlotData } from "@/utils/mathUtils";
 import { ParameterControls } from "@/components/ParameterControls";
 import { ConicSelector } from "@/components/ConicSelector";
 import Header from "@/components/Header";
@@ -13,18 +12,25 @@ import { setupThreeScene } from "@/utils/threeUtils";
 
 const PlotlyChart = dynamic(() => import("@/components/PlotlyChart"), {
   ssr: false,
-  loading: () => (
-    <div className="flex items-center justify-center h-full">
-      <div className="text-center p-6">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
-        <p className="text-muted-foreground">Loading chart...</p>
+  loading: () => <LoadingPlaceholder />,
+});
+
+function LoadingPlaceholder() {
+  return (
+    <div className="flex items-center justify-center h-full w-full">
+      <div className="text-center space-y-4">
+        <div className="inline-block">
+          <div className="animate-spin rounded-full h-8 w-8 border-2 border-muted border-t-foreground" />
+        </div>
+        <p className="text-sm text-muted-foreground">Loading chart...</p>
       </div>
     </div>
-  ),
-});
+  );
+}
 
 export default function HomePage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasContainerRef = useRef<HTMLDivElement>(null);
   const sceneControlsRef = useRef<{
     pauseAnimation: () => void;
     playAnimation: () => void;
@@ -34,52 +40,45 @@ export default function HomePage() {
 
   const { resolvedTheme } = useTheme();
   const isDarkMode = resolvedTheme === "dark";
+  const [mounted, setMounted] = useState(false);
 
   const [conicType, setConicType] = useState<ConicType>("parabola");
   const [isAnimationPlaying, setIsAnimationPlaying] = useState(true);
   const [params, setParams] = useState<EllipseParameters>({
-    a: 1,
-    b: 1,
+    a: 2,
+    b: 1.5,
     h: 0,
     k: 0,
   });
 
-  // Debug logging to see state changes
   useEffect(() => {
-    console.log("🔄 Conic type changed to:", conicType);
-  }, [conicType]);
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
-    console.log("📊 Parameters changed to:", params);
-  }, [params]);
+    if (canvasRef.current && canvasContainerRef.current && mounted) {
+      const width = canvasContainerRef.current.clientWidth;
+      const height = canvasContainerRef.current.clientHeight;
 
-  useEffect(() => {
-    if (canvasRef.current) {
-      const controls = setupThreeScene(
-        canvasRef.current,
-        conicType,
-        isDarkMode
-      );
+      canvasRef.current.width = width;
+      canvasRef.current.height = height;
+
+      const controls = setupThreeScene(canvasRef.current, conicType, isDarkMode);
       sceneControlsRef.current = controls;
       return controls.cleanup;
     }
-  }, [conicType, isDarkMode]);
-
-  const plotData = generateConicPlotData(conicType, params);
+  }, [conicType, isDarkMode, mounted]);
 
   const handleConicTypeChange = (newType: ConicType) => {
-    console.log("🎯 ConicSelector onChange called with:", newType);
     setConicType(newType);
   };
 
   const handleParamsChange = (newParams: EllipseParameters) => {
-    console.log("⚙️ ParameterControls onChange called with:", newParams);
     setParams(newParams);
   };
 
   const handleReset = () => {
-    console.log("🔄 Reset button clicked");
-    setParams({ a: 1, b: 1, h: 0, k: 0 });
+    setParams({ a: 2, b: 1.5, h: 0, k: 0 });
   };
 
   const toggleAnimation = () => {
@@ -94,145 +93,67 @@ export default function HomePage() {
     }
   };
 
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+        <LoadingPlaceholder />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="flex h-screen">
-        {/* Sidebar */}
-        <aside className="w-full md:w-1/3 p-6 overflow-y-auto border-r border-border bg-card">
-          <Header
-            plotData={plotData}
-            equationJSON={JSON.stringify({ conicType, ...params }, null, 2)}
-          />
+      <Header />
 
-          <p className="text-sm text-muted-foreground mb-6">
-            Explore parabolas, circles, ellipses, and hyperbolas
-          </p>
+      <div className="container mx-auto px-4 py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-180px)]">
+          {/* Left Sidebar - Controls */}
+          <div className="lg:col-span-1 space-y-6 flex flex-col">
+            <div className="bg-card border border-border rounded-lg p-6 space-y-4">
+              <ConicSelector conicType={conicType} onChange={handleConicTypeChange} />
 
-          <div className="mb-6">
-            <ConicSelector
-              conicType={conicType}
-              onChange={handleConicTypeChange}
-            />
-          </div>
-
-          <div className="p-4 rounded-lg mb-6 border border-primary/20 bg-primary/5">
-            <h3 className="text-lg font-semibold mb-2 text-primary">
-              Current Equation:
-            </h3>
-            <div className="text-lg font-mono text-primary/80">
-              {conicType === "parabola" &&
-                `y = ${params.a}(x - ${params.h})² + ${params.k}`}
-              {conicType === "circle" &&
-                `(x - ${params.h})² + (y - ${params.k})² = ${params.a}²`}
-              {conicType === "ellipse" &&
-                `(x - ${params.h})²/${params.a}² + (y - ${params.k})²/${params.b}² = 1`}
-              {conicType === "hyperbola" &&
-                `(x - ${params.h})²/${params.a}² - (y - ${params.k})²/${params.b}² = 1`}
-            </div>
-          </div>
-
-          <ParameterControls
-            conicType={conicType}
-            params={params}
-            onChange={handleParamsChange}
-          />
-
-          <button
-            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-2 px-4 rounded-lg transition-colors mb-6"
-            onClick={handleReset}
-          >
-            Reset to Default
-          </button>
-
-          <div className="p-4 rounded-lg border border-border bg-card">
-            <div className="flex items-center justify-between mb-3">
-              <h4 className="font-semibold text-card-foreground">
-                How Conic Sections Form:
-              </h4>
-              <button
-                className="p-1.5 rounded-md transition-colors bg-muted hover:bg-muted/80 text-muted-foreground"
-                onClick={toggleAnimation}
-                title={
-                  isAnimationPlaying ? "Pause animation" : "Play animation"
-                }
-              >
-                {isAnimationPlaying ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <rect width="4" height="16" x="6" y="4"></rect>
-                    <rect width="4" height="16" x="14" y="4"></rect>
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polygon points="5,3 19,12 5,21"></polygon>
-                  </svg>
-                )}
-              </button>
-            </div>
-            <div className="flex justify-center mb-4">
-              <div
-                className="border rounded-lg border-border"
-                style={{ width: 300, height: 300 }}
-              >
-                <canvas
-                  ref={canvasRef}
-                  width={300}
-                  height={300}
-                  className="rounded-lg"
+              <div className="border-t border-border pt-4">
+                <ParameterControls
+                  conicType={conicType}
+                  params={params}
+                  onChange={handleParamsChange}
                 />
               </div>
-            </div>
-            <div className="text-sm text-muted-foreground">
-              <div className="flex items-start">
-                <div className="w-3 h-3 bg-primary rounded mr-3 mt-0.5 flex-shrink-0"></div>
-                <div>
-                  <div className="font-medium text-primary mb-1">
-                    {conicType.charAt(0).toUpperCase() + conicType.slice(1)}
-                  </div>
-                  <div>
-                    A {conicType} forms based on how a plane intersects a cone.
-                    This view helps visualize the geometry behind its equation.
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </aside>
 
-        {/* Main Chart Area */}
-        <main className="flex-1 p-6 bg-background">
-          <Suspense
-            fallback={
-              <div className="flex items-center justify-center h-full">
-                <div className="text-center p-6">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
-                  <p className="text-muted-foreground">Loading chart...</p>
-                </div>
+              <div className="flex gap-2 pt-4 border-t border-border">
+                <button
+                  onClick={handleReset}
+                  className="flex-1 px-4 py-2 bg-secondary text-foreground rounded-md hover:bg-accent hover:text-card-foreground transition-colors text-sm font-medium"
+                >
+                  Reset
+                </button>
+                <button
+                  onClick={toggleAnimation}
+                  className="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:opacity-90 transition-opacity text-sm font-medium"
+                >
+                  {isAnimationPlaying ? "Pause" : "Play"}
+                </button>
               </div>
-            }
-          >
-            <PlotlyChart type={conicType} params={params} />
-          </Suspense>
-        </main>
+            </div>
+
+            {/* 3D Preview - Fill remaining space */}
+            {mounted && (
+              <div
+                ref={canvasContainerRef}
+                className="flex-1 bg-card border border-border rounded-lg overflow-hidden"
+              >
+                <canvas ref={canvasRef} className="w-full h-full" />
+              </div>
+            )}
+          </div>
+
+          {/* Main Content - Chart */}
+          <div className="lg:col-span-2">
+            <Suspense fallback={<LoadingPlaceholder />}>
+              <PlotlyChart type={conicType} params={params} />
+            </Suspense>
+          </div>
+        </div>
       </div>
     </div>
   );

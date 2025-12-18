@@ -1,4 +1,5 @@
-import { useTheme } from "next-themes";
+"use client"
+
 import type { ConicType } from "@/types";
 
 interface ConicSelectorProps {
@@ -9,30 +10,25 @@ interface ConicSelectorProps {
 export function ConicSelector({ conicType, onChange }: ConicSelectorProps) {
   const types: ConicType[] = ["parabola", "circle", "ellipse", "hyperbola"];
 
-  const handleClick = (type: ConicType) => {
-    console.log("🎯 Button clicked for:", type);
-    onChange(type);
-  };
-
   return (
-    <div className="mb-6">
-      <div className="flex rounded-lg p-1 w-full bg-muted">
+    <div className="space-y-3">
+      <label className="text-sm font-semibold text-foreground block">
+        Conic Type
+      </label>
+      <div className="grid grid-cols-2 gap-2">
         {types.map((type) => (
           <button
             key={type}
-            onClick={() => handleClick(type)}
-            className={`flex-1 px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
+            onClick={() => onChange(type)}
+            className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${
               conicType === type
-                ? "bg-primary text-primary-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground hover:bg-muted/80"
+                ? "bg-primary text-primary-foreground shadow-md"
+                : "bg-secondary text-foreground hover:bg-accent"
             }`}
           >
             {type.charAt(0).toUpperCase() + type.slice(1)}
           </button>
         ))}
-      </div>
-      <div className="text-center mt-2 text-sm font-medium text-primary">
-        {conicType.charAt(0).toUpperCase() + conicType.slice(1)} Conic Type
       </div>
     </div>
   );

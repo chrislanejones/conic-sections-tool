@@ -1,64 +1,74 @@
-# 📐 Interactive Conic Sections Tool
+![Conic Banner with Banner](/public/Conic-Sections.webp)
+# Interactive Conic Sections
 
 An advanced educational web application for exploring and visualizing conic sections with real-time 3D demonstrations, interactive parameter controls, dynamic mathematical equations, and comprehensive key point visualization.
 
-![Conic Sections Demo](https://img.shields.io/badge/Demo-Live-brightgreen)
-![Next.js](https://img.shields.io/badge/Next.js-14.2.30-black)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue)
-![License](https://img.shields.io/badge/License-MIT-green)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Next.js](https://img.shields.io/badge/Next.js-16-black)
+![React](https://img.shields.io/badge/React-19-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4-38B2AC)
 
-## ✨ Features
+## Features
 
-### 🎯 **Interactive Visualization**
+### Core Functionality
+- **Real-time Interactive Graphs** - Plotly.js charts with smooth parameter updates and mathematical accuracy
+- **3D Cone Visualizations** - Three.js double-cone demonstrations showing how conic sections form geometrically
+- **Animation Controls** - Pause/Play functionality for 3D visualization
+- **Live Equation Display** - Dynamic mathematical equation formatting
+- **Complete Key Point Visualization** - Vertices, foci, directrix, centers, and more
 
-- **Real-time Plotly charts** with smooth parameter updates and mathematical accuracy
-- **3D Three.js cone demonstrations** showing how conic sections form geometrically
-- **Pause/Play animation controls** for the 3D visualization
-- **Live equation display** with LaTeX-style mathematical formatting
-- **Complete key point visualization** including vertices, foci, directrix, and centers
+### Supported Conic Types
 
-### 📊 **Four Conic Types with Full Mathematical Detail**
+#### Parabola
+- Equation: `y = a(x - h)² + k`
+- Displays: Vertex, Focus, and Directrix line
+- Parameters: `a` (shape), `h` (horizontal shift), `k` (vertical shift)
 
-- **Parabola**: `y = a(x - h)² + k`
-  - Displays: Vertex, Focus, and Directrix line
-- **Circle**: `(x - h)² + (y - k)² = r²`
-  - Displays: Center point
-- **Ellipse**: `(x - h)²/a² + (y - k)²/b² = 1`
-  - Displays: Center, Two Foci, and Vertices (major/minor axes endpoints)
-- **Hyperbola**: `(x - h)²/a² - (y - k)²/b² = 1`
-  - Displays: Center, Two Foci, and Vertices
+#### Circle
+- Equation: `(x - h)² + (y - k)² = r²`
+- Displays: Center point
+- Parameters: `a` (radius), `h` (center x), `k` (center y)
 
-### 🎨 **Modern UI/UX**
+#### Ellipse
+- Equation: `(x - h)²/a² + (y - k)²/b² = 1`
+- Displays: Center, Two Foci, and Vertices (major/minor axes endpoints)
+- Parameters: `a` (semi-major), `b` (semi-minor), `h`, `k`
 
-- **Full light/dark mode support** with shadcn/ui theming system
-- **Responsive design** optimized for desktop, tablet, and mobile
-- **Smooth animations** and transitions throughout the interface
-- **Accessible controls** with proper ARIA labels and keyboard navigation
-- **Type-safe implementation** with comprehensive TypeScript coverage
+#### Hyperbola
+- Equation: `(x - h)²/a² - (y - k)²/b² = 1`
+- Displays: Center, Two Foci, and Vertices
+- Parameters: `a`, `b`, `h`, `k`
 
-### 📁 **Export Capabilities**
+### UI/UX Features
+- **Full Light/Dark Mode Support** - Beautiful monotone shadcn/ui theming
+- **Responsive Design** - Optimized for desktop, tablet, and mobile
+- **Smooth Animations** - Transitions and visual feedback throughout
+- **Accessible Controls** - Proper ARIA labels and keyboard navigation
+- **Dynamic Parameter Sliders** - Real-time visual feedback
+- **Context-aware UI** - Parameters change based on selected conic type
+- **Reset Functionality** - Return to default values instantly
 
-- **Graph export** in multiple formats (PNG, SVG)
-- **Data export** as CSV files for further analysis
-- **Equation export** in JSON format for sharing configurations
-- **Clipboard integration** for easy copying and sharing
+## Tech Stack
 
-### 🎛️ **Advanced Controls**
+- **Framework**: [Next.js 16](https://nextjs.org/) - React framework with App Router
+- **UI Library**: [React 19](https://react.dev/) - Modern React with hooks
+- **Language**: [TypeScript 5.9](https://www.typescriptlang.org/) - Type safety
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/) - Utility-first CSS
+- **Components**: [shadcn/ui](https://ui.shadcn.com/) - High-quality component library
+- **Charting**: [Plotly.js 3](https://plotly.com/javascript/) - Interactive 2D graphs
+- **3D Graphics**: [Three.js 0.182](https://threejs.org/) - WebGL 3D visualization
+- **Themes**: [next-themes](https://github.com/pacocoursey/next-themes) - Theme switching
+- **Icons**: [Lucide React](https://lucide.dev/) - Beautiful icon library
+- **Accessibility**: [Radix UI](https://www.radix-ui.com/) - Accessible primitives
 
-- **Dynamic parameter sliders** with real-time visual feedback
-- **Context-aware UI** (parameters change based on selected conic type)
-- **Animation control** with pause/play functionality
-- **Reset functionality** to return to default values
-- **Theme toggle** for comfortable viewing in any lighting condition
-
-## 🚀 Quick Start
+## Installation
 
 ### Prerequisites
-
 - **Node.js** 16.8.0 or higher
 - **pnpm** (recommended) or npm
 
-### Installation
+### Quick Start
 
 ```bash
 # Clone the repository
@@ -72,435 +82,194 @@ pnpm install
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the application.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## 🛠️ Tech Stack
+## Usage
 
-### **Frontend Framework**
+### Selecting a Conic Type
+Click the buttons in the left panel to switch between Parabola, Circle, Ellipse, and Hyperbola.
 
-- **Next.js 14.2.30** - React framework with App Router
-- **React 18.3.1** - UI library
-- **TypeScript 5.8.3** - Type safety
+### Adjusting Parameters
+Use the interactive sliders to modify:
+- **a**: Controls the width/semi-major axis
+- **b**: Controls the height/semi-minor axis (hidden for parabola and circle)
+- **h**: Horizontal shift (left/right)
+- **k**: Vertical shift (up/down)
 
-### **Visualization**
+Changes are reflected in real-time on the graph and 3D visualization.
 
-- **Plotly.js 3.0.1** - Interactive charts and graphs
-- **Three.js 0.158.0** - 3D cone visualizations
-- **React-Plotly.js 2.6.0** - React integration for Plotly
+### 3D Animation
+- Click **Play** to rotate the double cone and animate the cutting plane
+- Click **Pause** to freeze the animation
+- The plane position automatically adjusts based on the selected conic type
 
-### **Styling & UI**
+### Theme Toggle
+Click the sun/moon icon in the header to switch between light and dark modes.
 
-- **Tailwind CSS 3.4.17** - Utility-first CSS framework
-- **shadcn/ui** - High-quality component library
-- **Radix UI** - Accessible component primitives
-- **next-themes** - Theme switching functionality
+### Reset
+Click **Reset** to return all parameters to their default values.
 
-### **Development Tools**
-
-- **ESLint** - Code linting
-- **Prettier** - Code formatting
-- **TypeScript** - Static type checking
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/
-├── app/                    # Next.js app directory
-│   ├── globals.css        # Global styles with shadcn/ui theming
-│   ├── layout.tsx         # Root layout with theme provider
-│   └── page.tsx           # Main application page
-├── components/            # React components
-│   ├── ui/               # shadcn/ui components
-│   │   ├── theme-provider.tsx
-│   │   └── toggle-group.tsx
-│   ├── ConicSelector.tsx  # Conic type selection buttons
-│   ├── Header.tsx         # App header with export controls
-│   ├── ParameterControls.tsx # Parameter sliders
-│   └── PlotlyChart.tsx    # Main chart component
-├── types/                 # TypeScript type definitions
-│   ├── index.ts          # Main types
-│   ├── plotly.d.ts       # Plotly type declarations
-│   └── react-plotly.js.d.ts # React-Plotly type declarations
-├── utils/                 # Utility functions
-│   ├── exportUtils.ts     # Export functionality
-│   ├── mathUtils.ts       # Mathematical calculations
-│   └── threeUtils.ts      # Three.js scene setup
-└── lib/                   # Library utilities
-    ├── constants.ts       # Application constants
-    └── utils.ts           # General utilities
+├── app/
+│   ├── globals.css           # Global styles and Tailwind config
+│   ├── layout.tsx            # Root layout with theme provider
+│   └── page.tsx              # Main application page
+├── components/
+│   ├── ui/
+│   │   ├── theme-provider.tsx    # next-themes wrapper
+│   │   └── toggle-group.tsx      # Radix UI toggle component
+│   ├── Header.tsx            # Header with theme toggle
+│   ├── ConicSelector.tsx      # Conic type selector buttons
+│   ├── ParameterControls.tsx  # Parameter slider controls
+│   └── PlotlyChart.tsx        # Plotly.js graph component
+├── types/
+│   ├── index.ts              # TypeScript interfaces
+│   ├── plotly.d.ts           # Plotly type definitions
+│   └── react-plotly.js.d.ts  # React-Plotly type definitions
+├── utils/
+│   ├── mathUtils.ts          # Mathematical calculations
+│   ├── threeUtils.ts         # Three.js scene setup
+│   └── exportUtils.ts        # Export functionality (future)
+└── lib/
+    ├── constants.ts          # App configuration constants
+    └── utils.ts              # Utility functions (cn helper)
 ```
 
-## 🎛️ Component Architecture
+## How It Works
 
-### **Main Components**
+### Mathematical Rendering
+The application uses parametric equations to generate points for each conic section:
 
-#### `page.tsx` - Application Core
+- **Parabola**: Standard form with vertex and focus calculations
+- **Circle/Ellipse**: Parametric equations using cosine and sine
+- **Hyperbola**: Hyperbolic functions (cosh, sinh) for both branches
 
-- Main application layout and state management
-- Handles conic type and parameter state
-- Integrates Three.js scene with animation controls
-- Theme detection and responsive design
-- Centralized event handling for all user interactions
+### 3D Visualization
+- Double cone created with Three.js ConeGeometry
+- Cutting plane positioned and rotated based on conic type
+- Real-time animation with requestAnimationFrame
+- Proper resource cleanup to prevent memory leaks
 
-#### `PlotlyChart.tsx` - Enhanced Mathematical Visualization
+### Key Points Calculation
+For each conic type, the app calculates and displays:
+- Mathematical centers and vertices
+- Focal points (for ellipses and hyperbolas)
+- Directrix lines (for parabolas)
+- Visual markers on the 2D graph
 
-- Interactive Plotly.js charts with full mathematical accuracy
-- **Key point calculation and display** for all conic types
-- Dynamic theming with shadcn/ui integration
-- Real-time parameter updates and smooth transitions
-- **Type-safe implementation** with comprehensive error handling
-- Export functionality integration
+### Theme System
+- Uses next-themes for persistent theme preference
+- CSS variables for seamless color transitions
+- Respects system color scheme preference
+- Works with Tailwind CSS custom colors
 
-#### `ConicSelector.tsx` - Conic Type Selection
+## Available Scripts
 
-- Toggle group interface for selecting conic types
-- Visual feedback for active selection
-- Theme-aware styling with hover states
-- Accessibility features for keyboard navigation
+```bash
+# Development
+pnpm dev              # Start development server
 
-#### `ParameterControls.tsx` - Dynamic Parameter Interface
+# Building
+pnpm build            # Build for production
+pnpm start            # Start production server
 
-- Context-sensitive parameter sliders
-- Real-time value display and feedback
-- Parameter visibility based on selected conic type
-- Custom styled range inputs with proper theming
-- Descriptive labels and help text
+# Code Quality
+pnpm lint             # Run ESLint
+pnpm type-check       # Run TypeScript compiler
+pnpm format           # Format code with Prettier
+pnpm format:check     # Check formatting
+```
 
-#### `Header.tsx` - Application Controls
+## Customization
 
-- Export functionality with dropdown menu
-- Theme toggle with system preference detection
-- Application branding and navigation
-- **Enhanced export options** for graphs, data, and equations
-
-### **Enhanced Utility Modules**
-
-#### `mathUtils.ts` - Mathematical Engine
-
-- **Comprehensive point generation** algorithms for all conic types
-- **Key point calculations** (vertices, foci, directrix, center)
-- Equation formatting with proper mathematical notation
-- Optimized curve generation with adaptive point density
-- **Type-safe mathematical operations**
-
-#### `threeUtils.ts` - 3D Visualization Engine
-
-- **Double-cone geometry** with point-to-point configuration
-- **Interactive animation controls** (play/pause functionality)
-- Theme-aware 3D scene rendering
-- **Accurate cutting plane positioning** for each conic type
-- Performance-optimized animation loops
-- Proper resource cleanup and memory management
-
-#### `exportUtils.ts` - Export Functionality
-
-- **Client-side only** implementation to prevent SSR issues
-- **Type-safe Plotly integration** with dynamic imports
-- Multiple export formats (PNG, SVG, CSV, JSON)
-- **Error handling and user feedback**
-- Clipboard integration for easy sharing
-
-## 🎨 Enhanced Theming System
-
-The application uses **shadcn/ui** with CSS custom properties for comprehensive theming support:
-
-### **CSS Custom Properties**
+### Changing Colors
+Edit the CSS variables in `src/app/globals.css`:
 
 ```css
-:root {
-  --background: 0 0% 100%; /* Main app background */
-  --foreground: 222.2 84% 4.9%; /* Primary text color */
-  --primary: 221.2 83.2% 53.3%; /* Interactive elements */
-  --muted: 210 40% 96%; /* Secondary backgrounds */
-  --border: 214.3 31.8% 91.4%; /* Border colors */
-  --card: 0 0% 100%; /* Component backgrounds */
-  /* ... complete color system */
+@theme {
+  --color-primary: #000000;
+  --color-background: #ffffff;
 }
 
-.dark {
-  --background: 222.2 84% 4.9%; /* Dark backgrounds */
-  --foreground: 210 40% 98%; /* Light text */
-  --primary: 217.2 91.2% 59.8%; /* Adjusted primary for dark mode */
-  /* ... dark mode color overrides */
+html.dark {
+  --color-primary: #ffffff;
+  --color-background: #000000;
 }
 ```
 
-### **Semantic Color Usage**
-
-- **`bg-background`** - Main page background that adapts to theme
-- **`bg-card`** - Component backgrounds (sidebar, controls)
-- **`text-foreground`** - Primary text that ensures proper contrast
-- **`text-muted-foreground`** - Secondary text for descriptions
-- **`bg-primary`** - Interactive elements (buttons, selections)
-- **`border-border`** - All borders with theme-appropriate colors
-
-### **Advanced Theme Features**
-
-- **System preference detection** - Automatically matches OS theme
-- **Smooth transitions** - All theme changes are animated
-- **Component-level theming** - Each component responds to theme changes
-- **3D scene theming** - Three.js background adapts to current theme
-- **Plotly chart theming** - Charts use theme colors for axes, grids, and text
-- **High contrast support** - Meets accessibility guidelines
-
-### **Theme Integration**
+### Adjusting Parameter Ranges
+Modify slider min/max in `src/components/ParameterControls.tsx`:
 
 ```typescript
-// Components automatically inherit theme colors
-const { resolvedTheme } = useTheme();
-const isDark = resolvedTheme === "dark";
-
-// 3D scenes adapt to theme
-setupThreeScene(canvas, conicType, isDark);
-
-// Charts use semantic colors
-paperBg: isDark ? 'hsl(var(--background))' : 'hsl(var(--background))',
-plotBg: isDark ? 'hsl(var(--card))' : 'hsl(var(--muted))',
+const min = param === "h" || param === "k" ? -10 : 0.1;
 ```
 
-## 📊 Mathematical Implementation
-
-### **Enhanced Conic Section Visualization**
-
-#### Parabola (`y = a(x - h)² + k`)
+### Graph Display Range
+Update the range in `src/components/PlotlyChart.tsx`:
 
 ```typescript
-Displayed Elements:
-- 🟢 Vertex: (h, k) - The turning point
-- 🔴 Focus: (h, k + 1/(4a)) - The focal point
-- 🟡 Directrix: y = k - 1/(4a) - Reference line (dashed)
-
-Key Properties:
-- Distance from any point to focus = distance to directrix
-- Opens upward when a > 0, downward when a < 0
-- Width controlled by parameter 'a'
-```
-
-#### Circle (`(x - h)² + (y - k)² = r²`)
-
-```typescript
-Displayed Elements:
-- 🔵 Center: (h, k) - The center point
-
-Key Properties:
-- All points equidistant from center
-- Radius = r (parameter 'a' in interface)
-- Perfect symmetry in all directions
-```
-
-#### Ellipse (`(x - h)²/a² + (y - k)²/b² = 1`)
-
-```typescript
-Displayed Elements:
-- 🔵 Center: (h, k) - The center point
-- 🔴 Foci: Two focal points where sum of distances is constant
-- 🟢 Vertices: Endpoints of major and minor axes
-
-Mathematical Relationships:
-- Focal distance: c = √|a² - b²|
-- Foci positions: (h ± c, k) if a > b, (h, k ± c) if b > a
-- Eccentricity: e = c/max(a,b)
-```
-
-#### Hyperbola (`(x - h)²/a² - (y - k)²/b² = 1`)
-
-```typescript
-Displayed Elements:
-- 🔵 Center: (h, k) - The center point
-- 🔴 Foci: Two focal points where difference of distances is constant
-- 🟢 Vertices: Closest points on each branch
-
-Mathematical Relationships:
-- Focal distance: c = √(a² + b²)
-- Foci positions: (h ± c, k)
-- Asymptotes: y - k = ±(b/a)(x - h)
-```
-
-### **3D Cone Visualization**
-
-The application features an accurate double-cone model where:
-
-- **Two cones** positioned point-to-point at the origin
-- **Cutting planes** at different angles create different conic sections:
-  - **Horizontal cut** → Circle (red plane)
-  - **Angled cut** → Ellipse (green plane)
-  - **Parallel to side** → Parabola (blue plane)
-  - **Through both cones** → Hyperbola (orange plane)
-- **Interactive controls** to pause/play the rotation animation
-- **Theme-aware rendering** for optimal viewing in light/dark modes
-
-## 🔧 Configuration
-
-### **Environment Variables**
-
-Create a `.env.local` file for custom configuration:
-
-```bash
-# Analytics (optional)
-NEXT_PUBLIC_GA_ID=your_analytics_id
-
-# Feature flags (optional)
-NEXT_PUBLIC_ENABLE_EXPORT=true
-NEXT_PUBLIC_ENABLE_3D=true
-```
-
-### **Customization**
-
-#### **Adding New Conic Types**
-
-1. Update `ConicType` in `src/types/index.ts`
-2. Add equation logic in `src/utils/mathUtils.ts`
-3. Update UI components for new parameters
-
-#### **Modifying Theme Colors**
-
-Edit `src/app/globals.css` to customize the color palette:
-
-```css
-:root {
-  --primary: your-custom-hue saturation lightness;
+xaxis: {
+  range: [-15, 15],
 }
 ```
 
-## 🚢 Deployment
+## Performance Optimizations
 
-### **Vercel (Recommended)**
+- **Dynamic Imports**: PlotlyChart loaded dynamically to avoid SSR issues
+- **Client-side Only**: Three.js and Plotly initialized on client
+- **Lazy Loading**: Components use React.lazy and Suspense
+- **Memory Management**: Proper cleanup of Three.js resources
+- **Efficient Rendering**: Memoized components where beneficial
 
-```bash
-# Install Vercel CLI
-npm i -g vercel
+## Browser Support
 
-# Deploy
-vercel
-```
+- Chrome 90+
+- Firefox 88+
+- Safari 14+
+- Edge 90+
 
-### **Docker**
+## Known Limitations
 
-```dockerfile
-FROM node:18-alpine
+- Plotly 3D mode disabled (2D only for simplicity)
+- Export functionality not yet implemented
+- Mobile touch controls for 3D not yet supported
 
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --only=production
+## Future Enhancements
 
-COPY . .
-RUN npm run build
+- [ ] Graph and data export (PNG, SVG, CSV)
+- [ ] Save/load configurations
+- [ ] Equation export in multiple formats
+- [ ] More conic properties (eccentricity display, etc.)
+- [ ] Mobile-optimized controls
+- [ ] Custom color themes
 
-EXPOSE 3000
-CMD ["npm", "start"]
-```
+## Contributing
 
-### **Static Export**
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-```bash
-# Build static version
-pnpm build
+## License
 
-# Serve static files
-npx serve out
-```
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 🧪 Testing & Quality Assurance
+## Learning Resources
 
-### **TypeScript Integration**
+- [Conic Sections on Wikipedia](https://en.wikipedia.org/wiki/Conic_section)
+- [Khan Academy - Conic Sections](https://www.khanacademy.org/math/precalculus/x9e6a4f10630fb89d:conics)
+- [Three.js Documentation](https://threejs.org/docs/)
+- [Plotly.js Documentation](https://plotly.com/javascript/)
 
-```bash
-# Comprehensive type checking
-pnpm type-check
+## Support
 
-# Development with strict type safety
-pnpm dev
-```
+For issues, questions, or suggestions, please open an issue on GitHub.
 
-**Type Safety Features:**
+## Author
 
-- **Strict TypeScript configuration** with comprehensive error checking
-- **Custom type definitions** for Plotly.js integration
-- **Type-safe mathematical calculations** with proper parameter validation
-- **Component prop validation** ensuring correct data flow
-- **Error boundary implementations** for graceful error handling
-
-### **Code Quality**
-
-```bash
-# Code linting with automatic fixes
-pnpm lint
-
-# Code formatting consistency
-pnpm format
-
-# Format checking without changes
-pnpm format:check
-```
-
-### **Development Workflow**
-
-- **Hot reload** for instant development feedback
-- **Error boundaries** catch and display errors gracefully
-- **Console logging** for debugging mathematical calculations
-- **Performance monitoring** for smooth animations
-- **Memory leak prevention** with proper cleanup functions
-
-## 🚀 **Recent Updates & Improvements**
-
-### **Version 2.0 Features**
-
-- ✅ **Complete key point visualization** - All mathematical elements now displayed
-- ✅ **Enhanced 3D visualization** - Point-to-point double cone geometry
-- ✅ **Animation controls** - Pause/play functionality for 3D scenes
-- ✅ **Type-safe implementation** - Comprehensive TypeScript coverage
-- ✅ **Improved theming** - Full shadcn/ui integration with semantic colors
-- ✅ **Better error handling** - Graceful failure and user feedback
-- ✅ **Export functionality** - Multiple formats with proper error handling
-
-### **Mathematical Accuracy**
-
-- **Vertex calculation** for parabolas with proper focal relationships
-- **Directrix visualization** as dashed reference lines
-- **Focal point calculations** for ellipses and hyperbolas
-- **Center point marking** for all applicable conic types
-- **Real-time updates** of all mathematical elements
-
-### **Performance Optimizations**
-
-- **Efficient point generation** with optimized algorithms
-- **Smooth animations** with requestAnimationFrame
-- **Memory management** with proper cleanup functions
-- **Responsive rendering** adapting to different screen sizes
-- **Client-side only exports** preventing SSR issues
-
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
-4. **Push** to the branch (`git push origin feature/amazing-feature`)
-5. **Open** a Pull Request
-
-### **Development Guidelines**
-
-- Follow TypeScript best practices
-- Use semantic commit messages
-- Add tests for new features
-- Update documentation as needed
-
-## 📄 License
-
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- **[Plotly.js](https://plotly.com/javascript/)** - Powerful charting library
-- **[Three.js](https://threejs.org/)** - 3D visualization capabilities
-- **[shadcn/ui](https://ui.shadcn.com/)** - Beautiful component library
-- **[Next.js](https://nextjs.org/)** - Amazing React framework
-- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first styling
-
-## 🔗 Links
-
-- **[Live Demo](https://conic-sections.vercel.app)** - Try the application
-- **[Documentation](https://github.com/yourusername/interactive-conic-sections/wiki)** - Detailed guides
-- **[Issues](https://github.com/yourusername/interactive-conic-sections/issues)** - Report bugs or request features
-- **[Discussions](https://github.com/yourusername/interactive-conic-sections/discussions)** - Community discussions
+Created as an educational tool for visualizing and understanding conic sections.
 
 ---
 
 **Made with ❤️ for mathematics education**
+
